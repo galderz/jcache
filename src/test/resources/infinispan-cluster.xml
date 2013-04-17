@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="urn:infinispan:config:5.3"
+            xsi:schemaLocation="urn:infinispan:config:5.3 http://www.infinispan.org/schemas/infinispan-config-5.3.xsd">
+   <global>
+      <transport
+            transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport"
+            clusterName="infinispan-cluster">
+      </transport>
+
+      <!-- Snippet 8: Add configuration -->
+      <serialization>
+         <advancedExternalizers>
+            <advancedExternalizer externalizerClass="jcache.ReplicatedCacheTest$FootballPlayerExternalizer"/>
+            <advancedExternalizer externalizerClass="jcache.ReplicatedCacheTest$FootballSquadExternalizer"/>
+         </advancedExternalizers>
+      </serialization>
+   </global>
+
+   <default />
+
+   <namedCache name="footballCache">
+      <clustering mode="replication">
+         <sync replTimeout="20000"/>
+      </clustering>
+   </namedCache>
+
+</infinispan>
