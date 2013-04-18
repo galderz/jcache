@@ -1,8 +1,10 @@
 Pre-requisites
 ==============
 
-* Increase font size of text and console!
-* Set up ad-hoc network!
+1. Increase font size of text and console!
+2. Set up ad-hoc network!
+3. Copy all java files from `src/main/start` to `src/main/java/jcache`
+4. Copy all xml files from `src/main/start` to `src/main/resources`
 
 Demo 1
 ======
@@ -121,4 +123,128 @@ to each cache manager.
 
 5. Press Ctrl+J and select snippet `jsr107-cluster-cacheloader`
 
-6. Assign each of the cache managers to ``
+6. Assign each of the cache managers to
+`Caching.getCacheManager(new TestClassLoader(tccl), "infinispan-cluster.xml")`
+
+7. Assign each of the caches: `cacheManager1.getCache("football")` and
+`cacheManager2.getCache("football")`
+
+8. Write code to store a football squad in the cache in node 1:
+`footballCache1.put(id, Database.squadPlayers(id))`
+
+9. Retrieve football squad from node 2 and print it out:
+`FootballSquad squad = footballCache2.get(id)` and `System.out.println(replicatedSquad)`
+
+10. Run ReplicatedCacheTest with system properties:
+`-Djava.net.preferIPv4Stack=true -Djgroups.bind_addr=127.0.0.1`. It should fail
+with `NotSerializableException`
+
+11. In order to distribute data in a cluster, it needs to be marshallable.
+There are different ways to do it in Infinispan, let's show you the
+Externalizer method. Infinispan allows you to define a Externalizer for a
+type without modifying the type's source code. This is very handy for
+situations where source code is not available, or you cannot modify the
+source code.
+
+12. Go to end of ReplicatedCacheTest, press Ctrl+J and select snippet
+`jsr107-cluster-externalizers`
+
+13. Once the externalizers have been defined, Infinispan needs to be
+configured with them, and we're gonna do it via XML. Go to
+`infinispan-cluster.xml` and go to the end of global section.
+Press Ctrl+J and select snippet `jsr107-cluster-xml-externalizers`
+
+14. Try running ReplicatedCacheTest again, it should print out the squad.
+
+Demo 4
+======
+
+1. Open TransactionalCacheTest, which is going to be used to test
+JCache transactions integration.
+
+2. A query cache is going to be defined, which given a String-based query,
+it returns a list of integers, representing ids that the query matched.
+
+3. JCache API enables you to verify whether a particular optional feature
+is supported by the implementation. So, to be sure, let's verify that
+Infinispan's JCache implementation supports transactions:
+`assertTrue(cacheManager.isSupported(OptionalFeature.TRANSACTIONS))`
+
+3. Configure the cache to use `READ_COMMITTED` isolation level, and local
+transactions:
+`cacheManager.configureCache("query", new SimpleConfiguration<String, List<Integer>>().setTransactions(IsolationLevel.READ_COMMITTED, Mode.LOCAL))`
+
+4. You can also configure XA transactions when the cache will participate
+in transactions with other XA resources.
+
+5. Assign the query cache: `queryCache = cacheManager.getCache("query")`
+
+6. To use transactions, we need a transaction manager and we're gonna use
+JBoss TS's transaction manager. Press Ctrl+J and select
+snippet `jsr107-transactions-transactionmanager`
+
+7. To see transactions in action, we need to call cache operations within
+a transaction, so that means that a transaction needs to be retrieved, call
+begin, then commit/rollback...etc. For that, I'm using a helper method that
+allows any operation to be called within a transaction. Go to the end of
+TransactionalCacheTest, press `Ctrl+J` and select snippet
+`jsr107-transactions-withTx`
+
+9. Call `queryCache.put(query, new ArrayList<Integer>(Arrays.asList(1, 2, 3)))`
+within a transaction.
+
+10. Get the query results from the cache outside of a transaction
+`queryCache.get(query)` and print results `System.out.println(ids)`.
+
+11. Run TransactionalCacheTest, it should print `[1, 2, 3]`
+
+12. Change implementation of testTransactions and throw an exception instead
+of returning null at the end of the callable implementation:
+`throw new Exception("Something went wrong...")`
+
+13. Catch the exception, and ignore it.
+
+14. Run TransactionalCacheTest, it should print `null`
+
+15. To finish the presentation, I wanna show you that JCache comes an API
+that allows you to do the same thing we just did but without using
+transactions.
+
+16. It's called `invokeProcessor` and it allows you to do compound operations
+against a particular entry in the cache, giving you the possibility to mutate
+it with exclusive access and in an atomic way. If an exception is thrown,
+the changes are not applied.
+
+17. Create a test method called `testInvokeProcessor()`
+
+18. Annotate the method with `@Test`
+
+19. Store a query and some results in the query cache:
+`queryCache.put(query, new ArrayList<Integer>(Arrays.asList(1, 2, 3)))`
+
+20. Call `queryCache.invokeEntryProcessor(query, new...`
+
+21. In the implementation, take the list of ids and add a new id to the list,
+and make sure you call setValue!
+`List<Integer> ids = entry.getValue();
+ids.add(4);
+entry.setValue(ids);`
+
+22. Get the query results from the cache outside of a transaction
+`queryCache.get(query)` and print results `System.out.println(ids)`.
+
+23. Execute test **method** `TransactionalCacheTest.testInvokeProcessor`
+right-clicking on the test method click on `run...`
+
+24. It should print: `[1, 2, 3, 4]`
+
+25. Change implementation of invoke processor and throw an exception instead
+of returning null at the end of the callable implementation:
+`throw new RuntimeException("Something went wrong...")`
+
+26. Catch the exception, and ignore it.
+
+27. Run `TransactionalCacheTest.testInvokeProcessor` once again
+
+28. The output should show: `[1, 2, 3]` because the changes in
+invokeProcessor implementation were not applied as a result of the exception.

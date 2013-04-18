@@ -9,6 +9,8 @@ import javax.cache.CacheManager;
 import javax.cache.Caching;
 import javax.cache.SimpleConfiguration;
 
+import static org.junit.Assert.*;
+
 public class BasicCacheApiTest extends AbstractBenchmark {
 
    static int REPS = 10000;

@@ -10,7 +10,7 @@ import javax.cache.SimpleConfiguration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static org.jgroups.util.Util.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * // TODO: Document this

@@ -7,6 +7,13 @@
             transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport"
             clusterName="infinispan-cluster">
       </transport>
+
+      <serialization>
+         <advancedExternalizers>
+            <advancedExternalizer externalizerClass="jcache.ReplicatedCacheTest$FootballPlayerExternalizer"/>
+            <advancedExternalizer externalizerClass="jcache.ReplicatedCacheTest$FootballSquadExternalizer"/>
+         </advancedExternalizers>
+      </serialization>
    </global>
 
    <default />

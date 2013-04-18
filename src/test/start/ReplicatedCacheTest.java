@@ -14,12 +14,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.*;
+
 /**
  * Run with: -Djava.net.preferIPv4Stack=true -Djgroups.bind_addr=127.0.0.1
  *
  * @author Galder Zamarreño
  */
 public class ReplicatedCacheTest {
+
+   static String id = "Brazil-WorldCup1982";
 
    static CacheManager cacheManager1;
    static CacheManager cacheManager2;

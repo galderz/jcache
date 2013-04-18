@@ -4,6 +4,8 @@ import com.carrotsearch.junitbenchmarks.AbstractBenchmark;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class BasicCacheApiTest extends AbstractBenchmark {
 
    static int REPS = 10000;

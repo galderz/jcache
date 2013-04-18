@@ -21,6 +21,8 @@ import java.util.Set;
  */
 public class ReplicatedCacheTest {
 
+   static String id = "Brazil-WorldCup1982";
+
    static CacheManager cacheManager1;
    static CacheManager cacheManager2;
 
@@ -34,14 +36,13 @@ public class ReplicatedCacheTest {
       cacheManager1 = Caching.getCacheManager(new TestClassLoader(tccl), "infinispan-cluster.xml");
       cacheManager2 = Caching.getCacheManager(new TestClassLoader(tccl), "infinispan-cluster.xml");
 
-      footballCache1 = cacheManager1.getCache("footballCache");
-      footballCache2 = cacheManager2.getCache("footballCache");
+      footballCache1 = cacheManager1.getCache("football");
+      footballCache2 = cacheManager2.getCache("football");
    }
 
    @Test
    public void testSquadPlayers() {
       // Snippet 4: test replication
-      String id = "Brazil-WorldCup1982";
       footballCache1.put(id, Database.squadPlayers(id));
       FootballSquad replicatedSquad = footballCache2.get(id);
       System.out.println(replicatedSquad);
