@@ -35,10 +35,9 @@ public class TransactionalCacheTest {
    public static void beforeClass() {
       cacheManager = Caching.getCacheManager();
       assertTrue(cacheManager.isSupported(OptionalFeature.TRANSACTIONS));
-      cacheManager.configureCache("query",
+      queryCache = cacheManager.configureCache("query",
             new SimpleConfiguration<String, List<Integer>>()
                   .setTransactions(IsolationLevel.READ_COMMITTED, Mode.LOCAL));
-      queryCache = cacheManager.getCache("query");
    }
 
    @Test
@@ -53,11 +52,9 @@ public class TransactionalCacheTest {
             }
          });
       } catch (Exception e) {
-         // Expected
+         List<Integer> ids = queryCache.get(query);
+         System.out.println(ids);
       }
-
-      List<Integer> ids = queryCache.get(query);
-      System.out.println(ids);
    }
 
    @Test
@@ -74,11 +71,9 @@ public class TransactionalCacheTest {
             }
          });
       } catch (Exception e) {
-         // Expected
+         List<Integer> ids = queryCache.get(query);
+         System.out.println(ids);
       }
-
-      List<Integer> ids = queryCache.get(query);
-      System.out.println(ids);
    }
 
    /**

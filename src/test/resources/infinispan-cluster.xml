@@ -4,24 +4,15 @@
             xsi:schemaLocation="urn:infinispan:config:5.3 http://www.infinispan.org/schemas/infinispan-config-5.3.xsd">
    <global>
       <transport
-            transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport"
-            clusterName="infinispan-cluster">
+         transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport"
+         clusterName="jcache-cluster">
       </transport>
-
-      <serialization>
-         <advancedExternalizers>
-            <advancedExternalizer externalizerClass="jcache.ReplicatedCacheTest$FootballPlayerExternalizer"/>
-            <advancedExternalizer externalizerClass="jcache.ReplicatedCacheTest$FootballSquadExternalizer"/>
-         </advancedExternalizers>
-      </serialization>
    </global>
 
    <default />
 
-   <namedCache name="football">
-      <clustering mode="replication">
-         <sync replTimeout="20000"/>
-      </clustering>
+   <namedCache name="namedCache">
+      <clustering mode="replication" />
    </namedCache>
 
 </infinispan>

@@ -49,8 +49,6 @@ public class PutVsGetAndPutTest {
 
    @Test
    public void testCache() {
-      footballCache.put(id, Database.squadPlayers(id));
-
       assertTrue(null == footballCache.getAndPut(id, Database.squadPlayers(id)));
       assertTrue(null != footballCache.getAndPut(id, Database.squadPlayers(id)));
    }

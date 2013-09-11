@@ -34,9 +34,12 @@ public class ReplicatedCacheTest {
    @BeforeClass
    public static void beforeClass() {
       ClassLoader tccl = Thread.currentThread().getContextClassLoader();
-      cacheManager1 = Caching.getCacheManager(new TestClassLoader(tccl), "infinispan-cluster.xml");
-      cacheManager2 = Caching.getCacheManager(new TestClassLoader(tccl), "infinispan-cluster.xml");
-
+      cacheManager1 =
+            Caching.getCacheManager(new TestClassLoader(tccl),
+                  "infinispan-cluster.xml");
+      cacheManager2 =
+            Caching.getCacheManager(new TestClassLoader(tccl),
+                  "infinispan-cluster.xml");
       footballCache1 = cacheManager1.getCache("football");
       footballCache2 = cacheManager2.getCache("football");
    }
@@ -102,6 +105,4 @@ public class ReplicatedCacheTest {
          return new FootballSquad(squad);
       }
    }
-
-
 }

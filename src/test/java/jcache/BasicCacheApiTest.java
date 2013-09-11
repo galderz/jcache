@@ -14,16 +14,15 @@ import static org.junit.Assert.*;
 public class BasicCacheApiTest extends AbstractBenchmark {
 
    static int REPS = 10000;
-
    static CacheManager cacheManager;
    static Cache<String, FootballSquad> footballCache;
 
    @BeforeClass
    public static void beforeClass() {
       cacheManager = Caching.getCacheManager();
-      cacheManager.configureCache("football",
-            new SimpleConfiguration<String, FootballSquad>().setStoreByValue(false));
-      footballCache = cacheManager.getCache("football");
+      footballCache = cacheManager.configureCache("fooball",
+            new SimpleConfiguration<String, FootballSquad>()
+                  .setStoreByValue(false));
    }
 
    @Test
@@ -38,6 +37,7 @@ public class BasicCacheApiTest extends AbstractBenchmark {
             squad = Database.squadPlayers(id);
             footballCache.put(id, squad);
          }
+
 
          use(squad); // do something with result
       }
