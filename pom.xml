@@ -15,7 +15,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <junit.version>4.10</junit.version>
       <jbossjta.version>4.16.4.Final</jbossjta.version>
-      <infinispan-jcache.version>5.3.0-SNAPSHOT</infinispan-jcache.version>
+      <infinispan-jcache.version>6.0.0.Alpha4</infinispan-jcache.version>
       <junit-benchmarks.version>0.6.0</junit-benchmarks.version>
    </properties>
 

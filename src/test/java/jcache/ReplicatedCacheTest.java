@@ -1,15 +1,17 @@
 package jcache;
 
-import org.infinispan.marshall.AdvancedExternalizer;
+import org.infinispan.commons.marshall.AdvancedExternalizer;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -34,12 +36,10 @@ public class ReplicatedCacheTest {
    @BeforeClass
    public static void beforeClass() {
       ClassLoader tccl = Thread.currentThread().getContextClassLoader();
-      cacheManager1 =
-            Caching.getCacheManager(new TestClassLoader(tccl),
-                  "infinispan-cluster.xml");
-      cacheManager2 =
-            Caching.getCacheManager(new TestClassLoader(tccl),
-                  "infinispan-cluster.xml");
+      cacheManager1 = Caching.getCachingProvider().getCacheManager(
+            URI.create("infinispan-cluster.xml"), new TestClassLoader(tccl));
+      cacheManager2 = Caching.getCachingProvider().getCacheManager(
+            new File("src/test/resources/infinispan-cluster.xml").toURI(), new TestClassLoader(tccl));
       footballCache1 = cacheManager1.getCache("football");
       footballCache2 = cacheManager2.getCache("football");
    }

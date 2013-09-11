@@ -7,7 +7,7 @@ import org.junit.Test;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
-import javax.cache.SimpleConfiguration;
+import javax.cache.configuration.MutableConfiguration;
 
 import static org.junit.Assert.*;
 
@@ -19,9 +19,9 @@ public class BasicCacheApiTest extends AbstractBenchmark {
 
    @BeforeClass
    public static void beforeClass() {
-      cacheManager = Caching.getCacheManager();
+      cacheManager = Caching.getCachingProvider().getCacheManager();
       footballCache = cacheManager.configureCache("fooball",
-            new SimpleConfiguration<String, FootballSquad>()
+            new MutableConfiguration<String, FootballSquad>()
                   .setStoreByValue(false));
    }
 

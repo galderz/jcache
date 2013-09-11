@@ -6,7 +6,7 @@ import org.junit.Test;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
-import javax.cache.SimpleConfiguration;
+import javax.cache.configuration.MutableConfiguration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -30,9 +30,9 @@ public class PutVsGetAndPutTest {
 
    @BeforeClass
    public static void beforeClass() {
-      cacheManager = Caching.getCacheManager();
+      cacheManager = Caching.getCachingProvider().getCacheManager();
       cacheManager.configureCache("football",
-            new SimpleConfiguration<String, FootballSquad>().setStoreByValue(false));
+            new MutableConfiguration<Object, Object>().setStoreByValue(false));
       footballCache = cacheManager.getCache("football");
    }
 
