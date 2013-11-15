@@ -31,7 +31,7 @@ public class PutVsGetAndPutTest {
    @BeforeClass
    public static void beforeClass() {
       cacheManager = Caching.getCachingProvider().getCacheManager();
-      cacheManager.configureCache("football",
+      cacheManager.createCache("football",
             new MutableConfiguration<Object, Object>().setStoreByValue(false));
       footballCache = cacheManager.getCache("football");
    }

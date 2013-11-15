@@ -20,7 +20,7 @@ public class BasicCacheApiTest extends AbstractBenchmark {
    @BeforeClass
    public static void beforeClass() {
       cacheManager = Caching.getCachingProvider().getCacheManager();
-      footballCache = cacheManager.configureCache("fooball",
+      footballCache = cacheManager.createCache("fooball",
             new MutableConfiguration<String, FootballSquad>()
                   .setStoreByValue(false));
    }
